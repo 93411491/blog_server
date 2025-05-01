@@ -1,35 +1,32 @@
+const { getList } = require("../controller/blog");
+const { SuccessModel } = require("../model/resModel");
 const { isGet, isPost } = require("./util/utils");
 const handBlogRouter = (req, res) => {
   const method = req.method;
-  const url = req.url;
-  const path = url.split("?")[0];
-  const query = url.split("?")[1];
 
-  console.log(`method :${method} , url : ${url} , path : ${path} , query : ${query}`);
-  
-
-  if (isGet(method) && path === "/api/blog/list") {
-    return {
-      msg: "get blog list",
-    };
+  if (isGet(method) && req.path === "/api/blog/list") {
+    const author = req.query.author || "";
+    const keyword = req.query.keyword | "";
+    const data = getList(author, keyword);
+    return new SuccessModel(data);
   }
 
-  if (isGet(method) && path === "/api/blog/detail") {
+  if (isGet(method) && req.path === "/api/blog/detail") {
     return {
       msg: "get blog detail",
     };
   }
-  if (isPost(method) && path === "/api/blog/new") {
+  if (isPost(method) && req.path === "/api/blog/new") {
     return {
       msg: "new blog",
     };
   }
-  if (isPost(method) && path === "/api/blog/update") {
+  if (isPost(method) && req.path === "/api/blog/update") {
     return {
       msg: "update blog",
     };
   }
-  if (isPost(method) && path === "/api/blog/del") {
+  if (isPost(method) && req.path === "/api/blog/del") {
     return {
       msg: "delete blog",
     };
