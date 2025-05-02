@@ -12,9 +12,9 @@ const handBlogRouter = (req, res) => {
   }
 
   if (isGet(method) && req.path === "/api/blog/detail") {
-    return {
-      msg: "get blog detail",
-    };
+    const id = req.query.id;
+    const data = getDetail(req.query.id);
+    return new SuccessModel(data);
   }
   if (isPost(method) && req.path === "/api/blog/new") {
     return {
