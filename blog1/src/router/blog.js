@@ -1,4 +1,4 @@
-const { getList } = require("../controller/blog");
+const { getList, getDetail, newBlog,updateBlog } = require("../controller/blog");
 const { SuccessModel } = require("../model/resModel");
 const { isGet, isPost } = require("./util/utils");
 const handBlogRouter = (req, res) => {
@@ -13,23 +13,26 @@ const handBlogRouter = (req, res) => {
 
   if (isGet(method) && req.path === "/api/blog/detail") {
     const id = req.query.id;
-    const data = getDetail(req.query.id);
+    const data = getDetail(id);
     return new SuccessModel(data);
   }
   if (isPost(method) && req.path === "/api/blog/new") {
-    return {
-      msg: "new blog",
-    };
+    const data = newBlog(req.body);
+    console.log(`new blog data , ${data}`);
+
+    return new SuccessModel(data);
   }
   if (isPost(method) && req.path === "/api/blog/update") {
-    return {
-      msg: "update blog",
-    };
+    const data = updateBlog(req.body);
+    return new SuccessModel(data);
   }
   if (isPost(method) && req.path === "/api/blog/del") {
-    return {
-      msg: "delete blog",
-    };
+    const data = delBlog(req.body);
+    if (data) {
+      return new SuccessModel(data);
+    } else {
+      return new ErrorModel("删除失败");
+    }
   }
 };
 
