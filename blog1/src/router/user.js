@@ -1,5 +1,5 @@
 const { isGet, isPost } = require("./util/utils");
-const { loginCheck } = require("../controller/user");
+const { login } = require("../controller/user");
 const { SuccessModel, ErrorModel } = require("../model/resModel");
 
 const handleUserRouter = (req, res) => {
@@ -8,7 +8,7 @@ const handleUserRouter = (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    return loginCheck(username, password).then((loginData) => {
+    return login(username, password).then((loginData) => {
       console.log("loginData", loginData);
 
       if (loginData && loginData.username) {
