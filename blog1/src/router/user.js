@@ -3,7 +3,8 @@ const { loginCheck } = require("../controller/user");
 const { SuccessModel, ErrorModel } = require("../model/resModel");
 
 const handleUserRouter = (req, res) => {
-  if (isGet(method) && path === "/api/user/login") {
+  const method = req.method;
+  if (isGet(method) && req.path === "/api/user/login") {
     const username = req.body.username;
     const password = req.body.password;
 

@@ -7,20 +7,25 @@ const handBlogRouter = (req, res) => {
   if (isGet(method) && req.path === "/api/blog/list") {
     const author = req.query.author || "";
     const keyword = req.query.keyword | "";
-    const data = getList(author, keyword);
-    return new SuccessModel(data);
+    return getList(author, keyword).then((listData) => {
+      return new SuccessModel(listData);
+    });
   }
 
   if (isGet(method) && req.path === "/api/blog/detail") {
-    const id = req.query.id;
-    const data = getDetail(id);
-    return new SuccessModel(data);
+    // const id = req.query.id;
+    // const data = getDetail(id);
+    // return new SuccessModel(data);
+    return getDetail(req.query.id).then((detailData) => {
+      return new SuccessModel(detailData);
+    });
   }
   if (isPost(method) && req.path === "/api/blog/new") {
-    const data = newBlog(req.body);
-    console.log(`new blog data , ${data}`);
+    console.log("req.body", req.body);
 
-    return new SuccessModel(data);
+    return newBlog(req.body).then((newBlogData) => {
+      return new SuccessModel(newBlogData);
+    });
   }
   if (isPost(method) && req.path === "/api/blog/update") {
     const data = updateBlog(req.body);

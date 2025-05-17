@@ -6,7 +6,7 @@ const { isGet } = require("./src/router/util/utils");
 
 const getPostData = (req) => {
   const promise = new Promise((resolve, reject) => {
-    if (!isGet(req.method)) {
+    if (isGet(req.method)) {
       resolve({});
       return;
     }
@@ -36,10 +36,12 @@ const serverHandler = (req, res) => {
 
   getPostData(req).then((postData) => {
     const blogData = handBlogRouter(req, res);
-    console.log("blogData", blogData);
 
     if (blogData) {
-      res.end(JSON.stringify(blogData));
+      blogData.then((blogData) => {
+        console.log("blogData", blogData);
+        res.end(JSON.stringify(blogData));
+      });
       return;
     }
 
