@@ -1,18 +1,22 @@
-const { isGet } = require("./util/utils");
+const { isGet, isPost } = require("./util/utils");
 const { loginCheck } = require("../controller/user");
 const { SuccessModel, ErrorModel } = require("../model/resModel");
 
 const handleUserRouter = (req, res) => {
   const method = req.method;
-  if (isGet(method) && req.path === "/api/user/login") {
+  if (isPost(method) && req.path === "/api/user/login") {
     const username = req.body.username;
     const password = req.body.password;
 
-    if (loginCheck(username, password)) {
-      return new SuccessModel("登录成功");
-    } else {
-      return new ErrorModel("等于失败");
-    }
+    return loginCheck(username, password).then((loginData) => {
+      console.log("loginData", loginData);
+
+      if (loginData && loginData.username) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel("登录失败");
+      }
+    });
   }
 };
 
