@@ -21,6 +21,7 @@ const getPostData = (req) => {
       postData += chunk.toString();
     });
     req.on("end", () => {
+    console.log("getPostData postData:", postData);
       resolve(JSON.parse(postData));
     });
   });
@@ -35,6 +36,7 @@ const serverHandler = (req, res) => {
   req.query = querystring.parse(url.split("?")[1]);
 
   getPostData(req).then((postData) => {
+    req.body = postData;
     const blogData = handBlogRouter(req, res);
 
     if (blogData) {

@@ -1,8 +1,15 @@
-const { getList, getDetail, newBlog,updateBlog } = require("../controller/blog");
+const {
+  getList,
+  getDetail,
+  newBlog,
+  updateBlog,
+  delBlog,
+} = require("../controller/blog");
 const { SuccessModel } = require("../model/resModel");
 const { isGet, isPost } = require("./util/utils");
 const handBlogRouter = (req, res) => {
   const method = req.method;
+  const id = req.query.id;
 
   if (isGet(method) && req.path === "/api/blog/list") {
     const author = req.query.author || "";
@@ -28,16 +35,21 @@ const handBlogRouter = (req, res) => {
     });
   }
   if (isPost(method) && req.path === "/api/blog/update") {
-    const data = updateBlog(req.body);
-    return new SuccessModel(data);
+    return updateBlog(id, req.body).then((val) => {
+      if (val) {
+        return new SuccessModel();
+      }
+      return new ErrorModel("更新失败");
+    });
   }
   if (isPost(method) && req.path === "/api/blog/del") {
-    const data = delBlog(req.body);
-    if (data) {
-      return new SuccessModel(data);
-    } else {
+    const author = "张三";
+    return delBlog(id, author).then((val) => {
+      if (val) {
+        return new SuccessModel();
+      }
       return new ErrorModel("删除失败");
-    }
+    });
   }
 };
 

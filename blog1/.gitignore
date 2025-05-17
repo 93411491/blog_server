@@ -28,3 +28,5 @@ logs
 # 构建输出
 /dist
 /build 
+
+../.
