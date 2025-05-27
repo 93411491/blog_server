@@ -47,7 +47,6 @@ const serverHandler = (req, res) => {
     const [key, value] = item.split("=");
     req.cookie[key.trim()] = value.trim();
   });
-  console.log("req.cookie", req.cookie);
 
   //session 解析
   let userId = req.cookie.userid;
