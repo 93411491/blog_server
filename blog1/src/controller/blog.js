@@ -24,7 +24,7 @@ const newBlog = (blogData = {}) => {
   console.log("newBlog blogData", blogData);
   const title = blogData.title;
   const content = blogData.content;
-  const author = "张三";
+  const author = blogData.author;
   const createTime = Date.now();
   const sql = `insert into blogs (title, content, author, createtime) values ('${title}', '${content}', '${author}', '${createTime}')`;
   return exec(sql).then((insertData) => {

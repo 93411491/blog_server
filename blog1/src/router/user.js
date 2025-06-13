@@ -1,14 +1,15 @@
 const { isGet, isPost } = require("./util/utils");
 const { login } = require("../controller/user");
 const { SuccessModel, ErrorModel } = require("../model/resModel");
+const { set } = require("../db/redis");
 
 const handleUserRouter = (req, res) => {
   const method = req.method;
-  if (isGet(method) && req.path === "/api/user/login") {
+  if (isPost(method) && req.path === "/api/user/login") {
     // const username = req.body.username;
     // const password = req.body.password;
 
-    const { username, password } = req.query;
+    const { username, password } = req.body;
 
     return login(username, password).then((loginData) => {
       console.log("loginData", loginData);
@@ -17,7 +18,9 @@ const handleUserRouter = (req, res) => {
 
         req.session.username = loginData.username;
         req.session.realname = loginData.realname;
-        
+        // 将session 存储到redis
+        set(req.sessionId, req.session);
+
         console.log("login req.session", req.session);
         
 
@@ -29,15 +32,15 @@ const handleUserRouter = (req, res) => {
   }
 
   //登录验证测试
-  if (isGet(method) && req.path === "/api/user/login-test") {
-    console.log("handleUserRouter req.session", req.session);
+  // if (isGet(method) && req.path === "/api/user/login-test") {
+  //   console.log("handleUserRouter req.session", req.session);
 
-    if (req.session.username) {
-      return Promise.resolve(new SuccessModel(req.session));
-    }
+  //   if (req.session.username) {
+  //     return Promise.resolve(new SuccessModel(req.session));
+  //   }
 
-    return Promise.resolve(new ErrorModel("尚未登录"));
-  }
+  //   return Promise.resolve(new ErrorModel("尚未登录"));
+  // }
 };
 
 module.exports = handleUserRouter;
